@@ -16,7 +16,8 @@ async function delayTime(ms) {
 
   for (const account of accounts) {
     const { username, password, panelnum } = account;
-
+    //用'*'遮挡用户名除最后两个字符以外的部分
+    let show_username = '*'.repeat(username.length-2) + username.slice(-2);
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
 
@@ -58,12 +59,12 @@ async function delayTime(ms) {
         // 获取当前的UTC时间和北京时间
         const nowUtc = formatToISO(new Date());// UTC时间
         const nowBeijing = formatToISO(new Date(new Date().getTime() + 8 * 60 * 60 * 1000)); // 北京时间东8区，用算术来搞
-        console.log(`账号 ${username} 于北京时间 ${nowBeijing}（UTC时间 ${nowUtc}）登录成功！`);
+        console.log(`账号 ${show_username} 于北京时间 ${nowBeijing}（UTC时间 ${nowUtc}）登录成功！`);
       } else {
-        console.error(`账号 ${username} 登录失败，请检查账号和密码是否正确。`);
+        console.error(`账号 ${show_username} 登录失败，请检查账号和密码是否正确。`);
       }
     } catch (error) {
-      console.error(`账号 ${username} 登录时出现错误: ${error}`);
+      console.error(`账号 ${show_username} 登录时出现错误: ${error}`);
     } finally {
       // 关闭页面和浏览器
       await page.close();
